@@ -1,0 +1,11 @@
+services:
+  restaurant-service:
+    build: ./restaurant-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - menu-service
+  menu-service:
+    build: ./menu-service
+    ports:
+      - "3002:3002"
