@@ -147,7 +147,6 @@ app.get("/restaurants/:id/menu", async (req, res) => {
   }
 });
 
-// IDs remain unique even after the last item is deleted.
 let nextId = Math.max(0, ...restaurants.map(item => item.id)) + 1;
 function validatePayload(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return "A JSON object is required";
