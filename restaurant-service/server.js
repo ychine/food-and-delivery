@@ -125,6 +125,8 @@ const restaurants = [
   }
 ];
 
+const menuServiceUrl = process.env.MENU_SERVICE_URL || "http://menu-service:3002";
+
 app.get("/", (req, res) => res.json({ service: "Restaurant Service", status: "Running" }));
 app.get("/restaurants", (req, res) => res.json(restaurants));
 app.get("/restaurants/:id", (req, res) => {
@@ -136,10 +138,11 @@ app.get("/restaurants/:id/menu", async (req, res) => {
   const restaurant = restaurants.find(x => x.id === Number(req.params.id));
   if (!restaurant) return res.status(404).json({ message: "Restaurant not found" });
   try {
-    const response = await fetch(`http://menu-service:3002/restaurants/${restaurant.id}/menu`);
+    const response = await fetch(`${menuServiceUrl}/menu/restaurants/${restaurant.id}/menu`);
     if (!response.ok) throw new Error("Menu Service returned an error");
     res.json({ restaurant, menu: await response.json() });
   } catch (error) {
+    console.error("Menu Service request failed:", error);
     res.status(503).json({ message: "Unable to communicate with Menu Service" });
   }
 });
