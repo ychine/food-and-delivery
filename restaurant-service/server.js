@@ -7,121 +7,141 @@ const restaurants = [
     "id": 1,
     "name": "Jollibee",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "101 Sampaguita Street, Barangay San Miguel, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 2,
     "name": "McDonald’s",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "24 Narra Street, Barangay Kapitolyo, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 3,
     "name": "Chowking",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "58 Mabini Street, Barangay Caniogan, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 4,
     "name": "Mang Inasal",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "76 Acacia Street, Barangay Bagong Ilog, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 5,
     "name": "Greenwich",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "12 Rosal Street, Barangay Rosario, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 6,
     "name": "KFC",
     "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "39 Molave Street, Barangay Maybunga, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 7,
     "name": "Pizza Hut",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "85 Ilang-Ilang Street, Barangay San Antonio, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 8,
     "name": "Shakey’s",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "17 Yakal Street, Barangay Ugong, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 9,
     "name": "Burger King",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "63 Gumamela Street, Barangay Oranbo, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 10,
     "name": "Wendy’s",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "28 Kamagong Street, Barangay Pineda, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 11,
     "name": "Popeyes",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "94 Duhat Street, Barangay Palatiw, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 12,
     "name": "Bonchon",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "46 Santan Street, Barangay Malinao, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 13,
     "name": "Tokyo Tokyo",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "31 Mahogany Street, Barangay San Nicolas, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 14,
     "name": "Goldilocks",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "72 Jasmine Street, Barangay Bambang, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 15,
     "name": "Red Ribbon",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "19 Balete Street, Barangay Kalawaan, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 16,
     "name": "Army Navy",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "54 Dahlia Street, Barangay Pinagbuhatan, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 17,
     "name": "Yellow Cab",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "88 Ipil Street, Barangay Sagad, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 18,
     "name": "North Park",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "35 Orchid Street, Barangay Santa Cruz, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 19,
     "name": "Panda Express",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "67 Talisay Street, Barangay Manggahan, Pasig City",
+    "status": "OPEN"
   },
   {
     "id": 20,
     "name": "Kenny Rogers Roasters",
     "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "22 Camia Street, Barangay Santolan, Pasig City",
+    "status": "OPEN"
   }
 ];
 
@@ -150,7 +170,7 @@ app.get("/restaurants/:id/menu", async (req, res) => {
 let nextId = Math.max(0, ...restaurants.map(item => item.id)) + 1;
 function validatePayload(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return "A JSON object is required";
-  const fields = ["name","cuisine","location"];
+  const fields = ["name","cuisine","address"];
   for (const field of fields) {
     if (field === "restaurantId") {
       if (!Number.isSafeInteger(body[field]) || body[field] < 1) return "restaurantId must be a positive integer";
@@ -160,10 +180,11 @@ function validatePayload(body) {
       return field + " must be a non-empty string";
     }
   }
+  if (!["OPEN", "CLOSED"].includes(body.status)) return "status must be OPEN or CLOSED";
   return null;
 }
 function payloadFields(body) {
-  return Object.fromEntries(["name","cuisine","location"].map(field => [field, typeof body[field] === "string" ? body[field].trim() : body[field]]));
+  return Object.fromEntries(["name","cuisine","address","status"].map(field => [field, typeof body[field] === "string" ? body[field].trim() : body[field]]));
 }
 app.post("/restaurants", (req, res) => {
   const error = validatePayload(req.body);
