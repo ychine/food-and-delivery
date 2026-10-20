@@ -6,122 +6,122 @@ const restaurants = [
   {
     "id": 1,
     "name": "Jollibee",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "100 Jollibee Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 2,
     "name": "McDonald’s",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "200 McDonalds Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 3,
     "name": "Chowking",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "300 Chowking Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 4,
     "name": "Mang Inasal",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "400 MangInasal Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 5,
     "name": "Greenwich",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "500 Greenwich Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 6,
     "name": "KFC",
-    "cuisine": "Fast Food",
-    "location": "Metro Manila"
+    "address": "600 KFC Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 7,
     "name": "Pizza Hut",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "700 PizzaHut Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 8,
     "name": "Shakey’s",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "800 Shakeys Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 9,
     "name": "Burger King",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "900 BurgerKing Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 10,
     "name": "Wendy’s",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1000 Wendys Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 11,
     "name": "Popeyes",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1100 Popeyes Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 12,
     "name": "Bonchon",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1200 Bonchon Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 13,
     "name": "Tokyo Tokyo",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1300 TokyoTokyo Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 14,
     "name": "Goldilocks",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1400 Goldilocks Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 15,
     "name": "Red Ribbon",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1500 RedRibbon Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 16,
     "name": "Army Navy",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1600 ArmyNavy Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 17,
     "name": "Yellow Cab",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1700 YellowCab Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 18,
     "name": "North Park",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1800 NorthPark Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 19,
     "name": "Panda Express",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "1900 PandaExpress Street, Metro Manila",
+    "operatingStatus": "Open"
   },
   {
     "id": 20,
     "name": "Kenny Rogers Roasters",
-    "cuisine": "Restaurant",
-    "location": "Metro Manila"
+    "address": "2000 KennyRogersRoasters Street, Metro Manila",
+    "operatingStatus": "Open"
   }
 ];
 
@@ -150,10 +150,12 @@ app.get("/restaurants/:id/menu", async (req, res) => {
 let nextId = Math.max(0, ...restaurants.map(item => item.id)) + 1;
 function validatePayload(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return "A JSON object is required";
-  const fields = ["name","cuisine","location"];
+  const fields = ["name", "address", "operatingStatus"];
   for (const field of fields) {
     if (field === "restaurantId") {
       if (!Number.isSafeInteger(body[field]) || body[field] < 1) return "restaurantId must be a positive integer";
+    } else if (field === "operatingStatus") {
+      if (!["Open", "Closed"].includes(body[field])) return "operatingStatus must be Open or Closed";
     } else if (field === "price") {
       if (typeof body[field] !== "number" || !Number.isFinite(body[field]) || body[field] < 0) return "price must be a non-negative number";
     } else if (typeof body[field] !== "string" || !body[field].trim()) {
@@ -163,7 +165,7 @@ function validatePayload(body) {
   return null;
 }
 function payloadFields(body) {
-  return Object.fromEntries(["name","cuisine","location"].map(field => [field, typeof body[field] === "string" ? body[field].trim() : body[field]]));
+  return Object.fromEntries(["name", "address", "operatingStatus"].map(field => [field, typeof body[field] === "string" ? body[field].trim() : body[field]]));
 }
 app.post("/restaurants", (req, res) => {
   const error = validatePayload(req.body);
