@@ -3,9 +3,24 @@ services:
     build: ./restaurant-service
     ports:
       - "3001:3001"
-    depends_on:
-      - menu-service
+    environment:
+      MENU_SERVICE_URL: http://menu-service:3002
+
   menu-service:
     build: ./menu-service
     ports:
       - "3002:3002"
+
+  customer-service:
+    build: ./customer-service
+    ports:
+      - "3003:3003"
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3004:3004"
+    environment:
+      CUSTOMER_SERVICE_URL: http://customer-service:3003
+      RESTAURANT_SERVICE_URL: http://restaurant-service:3001
+      MENU_SERVICE_URL: http://menu-service:3002
