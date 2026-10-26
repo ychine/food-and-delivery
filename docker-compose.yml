@@ -24,3 +24,19 @@ services:
       CUSTOMER_SERVICE_URL: http://customer-service:3003
       RESTAURANT_SERVICE_URL: http://restaurant-service:3001
       MENU_SERVICE_URL: http://menu-service:3002
+      PAYMENT_SERVICE_URL: http://payment-service:3005
+      DELIVERY_SERVICE_URL: http://delivery-service:3006
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "3005:3005"
+    environment:
+      ORDER_SERVICE_URL: http://order-service:3004
+
+  delivery-service:
+    build: ./delivery-service
+    ports:
+      - "3006:3006"
+    environment:
+      ORDER_SERVICE_URL: http://order-service:3004

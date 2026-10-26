@@ -34,7 +34,9 @@ async function remote(service, path) {
   const ports = {
     CUSTOMER: 3003,
     RESTAURANT: 3001,
-    MENU: 3002
+    MENU: 3002,
+    PAYMENT: 3005,
+    DELIVERY: 3006
   };
 
   const baseUrl =
