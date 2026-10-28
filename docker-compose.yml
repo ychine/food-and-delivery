@@ -40,3 +40,17 @@ services:
       - "3006:3006"
     environment:
       ORDER_SERVICE_URL: http://order-service:3004
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "3007:3007"
+    environment:
+      CUSTOMER_SERVICE_URL: http://customer-service:3003
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "3008:3008"
+    environment:
+      CUSTOMER_SERVICE_URL: http://customer-service:3003
